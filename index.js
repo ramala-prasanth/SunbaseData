@@ -18,9 +18,35 @@ app.post('/addCustomerForm', (req, res) => {
     res.render('addCustomer');
 });
 
+app.post('/update', (req, res) => {
+  var data = [req.body.uuid, req.body.first_name, req.body.last_name, req.body.street, req.body.address, req.body.city, req.body.state, req.body.email, req.body.phone]
+  console.log(data);
+  res.render('updateCustomer', {data: data});
+});
+
+app.post('/delete', (req, res) => {
+  var uuid = req.body.uuid;
+  console.log(uuid);
+  var options = {
+    'method': 'POST',
+    'url': 'https://qa2.sunbasedata.com/sunbase/portal/api/assignment.jsp?cmd=delete&uuid='+uuid,
+    'headers': {
+      'Authorization': 'Bearer dGVzdEBzdW5iYXNlZGF0YS5jb206VGVzdEAxMjM= ',
+      'Cookie': 'JSESSIONID=A439E5F8A674E310B933045DA7EADA95'
+    }
+  };
+  request(options, function (error, response) {
+    if (error) throw new Error(error);
+    console.log(response.body);
+    res.status(response.statusCode).send('Successfully Deleted')
+  });
+  
+
+});
+
 app.post('/addCustomer', (req, res) => {
     var token = sessionstorage.getItem('token'); // Get the Bearer token from the request headers
-    console.log(req.body.first_name);
+    // console.log(req.body.first_name);
     const customerData = {
       first_name: req.body.first_name,
       last_name: req.body.last_name,
@@ -31,27 +57,22 @@ app.post('/addCustomer', (req, res) => {
       email: req.body.email,
       phone: req.body.phone
     };
-    console.log('Bearer ' + token);
+    // console.log(JSON.stringify(customerData));
     // Call the API to create a new customer
-    request.post({
-      url: 'https://qa2.sunbasedata.com/sunbase/portal/api/assignment.jsp?cmd=create',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token // Set the Bearer token in the request headers
+    var options = {
+      'method': 'POST',
+      'url': 'https://qa2.sunbasedata.com/sunbase/portal/api/assignment.jsp?cmd=create',
+      'headers': {
+        'Authorization': 'Bearer dGVzdEBzdW5iYXNlZGF0YS5jb206VGVzdEAxMjM= ',
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify(customerData)
-    }, (error, response, body) => {
-      if (error) {
-        // Handle error
-        res.status(500).send('Error: ' + error.message);
-      } else if (response.statusCode === 200) {
-        // Print the response status code
-        res.status(200).send('Customer created successfully');
-      } else {
-        // Display an error message
-        res.status(response.statusCode).send('Failed to create customer');
-      }
-    });
+      body: JSON.stringify(customerData)    
+    };
+    request(options, function (error, response) {
+      if (error) throw new Error(error);
+      console.log(response.body);
+      res.status(response.statusCode).send('Successfully Created')
+    });    
   });
 
 app.get('/displaycustomerlist', (req, res) => {
@@ -59,7 +80,7 @@ app.get('/displaycustomerlist', (req, res) => {
     'method': 'GET',
     'url': 'https://qa2.sunbasedata.com/sunbase/portal/api/assignment.jsp?cmd=get_customer_list',
     'headers': {
-      'Authorization': 'Bearer dGVzdEBzdW5iYXNlZGF0YS5jb206VGVzdEAxMjM= '
+      'Authorization': 'Bearer dGVzdEBzdW5iYXNlZGF0YS5jb206VGVzdEAxMjM='
     },
   };
   request(options, function (error, response) {

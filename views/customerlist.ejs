@@ -10,12 +10,14 @@
       }
       .container {
         text-align: center;
+        width: 100%;
+      }
+      .add-button {
+        text-align: center;
       }
       table {
-        border-collapse: collapse;
-        width: 100%;
-        max-width: 800px;
-        margin: 0 auto;
+        width: 80%;
+        margin: 20px;
         background-color: #fff;
         padding: 20px;
         border-radius: 5px;
@@ -25,6 +27,9 @@
         padding: 10px;
         text-align: left;
         border-bottom: 1px solid #ddd;
+      }
+      th:first-child, td:first-child {
+         width: 10%;
       }
       th {
         background-color: #f2f2f2;
@@ -45,9 +50,11 @@
   <body>
     <h1>Customer List</h1>
     <div class="container">
-      <form action="/addCustomerForm" method="post">
-        <input type="submit" value="Add Customer">
-      </form>
+      <div class="add-button">
+        <form action="/addCustomerForm" method="post">
+          <input type="submit" value="Add Customer">
+        </form>
+      </div>
       <table>
         <thead>
           <tr>
@@ -59,10 +66,10 @@
             <th>State</th>
             <th>Email</th>
             <th>Phone</th>
+            <th>Edit/Delete</th>
           </tr>
         </thead>
         <tbody>
-          <% console.log(data[1].first_name); %>
           <% for( var index = 0; index < data.length; index++ ) { %>
              <tr>
               <td><%= data[index].first_name %></td>
@@ -73,6 +80,23 @@
               <td><%= data[index].state %></td>
               <td><%= data[index].email %></td>
               <td><%= data[index].phone %></td>
+              <td><form action="update" method="post">
+                <input type="hidden" name="uuid" value="<%= data[index].uuid %>">
+                <input type="hidden" name="first_name" value="<%= data[index].first_name %>">
+                <input type="hidden" name="last_name" value="<%= data[index].last_name %>">
+                <input type="hidden" name="street" value="<%= data[index].street %>">
+                <input type="hidden" name="address" value="<%= data[index].address %>">
+                <input type="hidden" name="city" value="<%= data[index].city %>">
+                <input type="hidden" name="state" value="<%= data[index].state %>">
+                <input type="hidden" name="email" value="<%= data[index].email %>">
+                <input type="hidden" name="phone" value="<%= data[index].phone %>">
+                <input type="submit" value="Edit">
+                </form>
+                <br>
+                <form action="delete" method="post">
+                  <input type="hidden" name="uuid" value="<%= data[index].uuid %>">
+                <input type="submit" value="Delete">
+              </form></td>
             </tr>
           <% } %>
          <!-- Add more rows here as needed -->
