@@ -45,7 +45,8 @@
   </head>
   <body>
     <h1>Update Customer</h1>
-    <form action="/addCustomer" method="post">
+    <form action="/updateCustomer" method="post">
+      <input type="hidden" name="uuid" value="<%= data[0] %>">
       <label for="first_name">First Name:</label>
       <input type="text" id="first_name" name="first_name" value="<%= data[1] %>"><br>
       <label for="last_name">Last Name:</label>

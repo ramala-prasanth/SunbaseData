@@ -16,8 +16,9 @@
         text-align: center;
       }
       table {
+        align-content: center;
         width: 80%;
-        margin: 20px;
+        margin-left: 150px;
         background-color: #fff;
         padding: 20px;
         border-radius: 5px;
@@ -48,6 +49,22 @@
     </style>
   </head>
   <body>
+    <% if (isAdded) { %>
+      <script>
+        alert("Successfully added customer!");
+      </script>
+    <% } %>
+    <% if (isDeleted) { %>
+      <script>
+        alert("Successfully Deleted customer!");
+      </script>
+    <% } %>
+    <% if (isUpdated) { %>
+      <script>
+        alert("Successfully updated customer!");
+      </script>
+    <% } %>
+
     <h1>Customer List</h1>
     <div class="container">
       <div class="add-button">
